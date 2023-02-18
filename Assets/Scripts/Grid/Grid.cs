@@ -5,10 +5,16 @@ namespace Grid
 {
     public class Grid
     {
+        [Header("Colors")]
+        public readonly Color evenColor = new Color(0.21f, 0.21f, 0.21f, 1);
+        public readonly Color oddColor = new Color(0.46f, 0.46f, 0.46f, 1);
+
         private readonly int _width, _height;
         private GridNode[,] _gridArray;
         private Vector3 _originPosition;
         private float _cellSize;
+
+
 
         public Grid(int width, int height, float cellSize, Vector3 originPosition)
         {
@@ -28,14 +34,11 @@ namespace Grid
         }
         public void CreateWorldUI()
         {
-            Color evenColor = new Color(0.21f, 0.21f, 0.21f, 1);
-            Color oddColor = new Color(0.46f, 0.46f, 0.46f, 1);
-
             for (int i = 0; i < _gridArray.GetLength(0); i++)
             {
                 for (int j = 0; j < _gridArray.GetLength(1); j++)
                 {
-                    Color color = (i + j) % 2 == 0 ? evenColor : oddColor;
+                    Color color = GetNodeColor(i, j);
                     GameObject go = CreateImageTile(i, j, color);
                     _gridArray[i, j].GameObject = go;
                     //CreateWorldText(i + ":" + j, IndexToWorldPosition(i, j));
@@ -81,6 +84,12 @@ namespace Grid
         {
             if (IndexInGrid(i, j))
             {
+
+                if (value.GridObject.type == GridType.EMPTY)
+                {
+                    Color tintColor = GetNodeColor(i, j);
+                    value.TintColor = tintColor;
+                }
                 _gridArray[i, j] = value;
                 _gridArray[i, j].UpdateGameObject();
                 return true;
@@ -98,6 +107,11 @@ namespace Grid
             {
                 GameObject go = _gridArray[i, j].GameObject;
                 value.GameObject = go;
+                if (value.GridObject.type == GridType.EMPTY)
+                {
+                    Color tintColor = GetNodeColor(i, j);
+                    value.TintColor = tintColor;
+                }
                 _gridArray[i, j] = value;
                 _gridArray[i, j].UpdateGameObject();
                 return true;
@@ -130,6 +144,10 @@ namespace Grid
         {
             WorldPositionToIndex(worldPos, out int i, out int j);
             return GetValue(i, j);
+        }
+        public Color GetNodeColor(int i, int j)
+        {
+            return (i + j) % 2 == 0 ? evenColor : oddColor;
         }
     }
 }

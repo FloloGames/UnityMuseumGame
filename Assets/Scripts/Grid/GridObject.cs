@@ -8,9 +8,10 @@ namespace Grid
     public class GridObject : ScriptableObject
     {
         public new string name = "Empty";
+        public int price = 100;//difference between dayly or onetime
+        public PaymentType paymentType = PaymentType.ONCE;
         public GridType type = GridType.EMPTY;
         public Sprite editorPreview = null;
-
         public GameObject finishedPrefab = null;
 
         private void OnEnable()
@@ -25,6 +26,12 @@ namespace Grid
             texture.SetPixel(0, 0, color);
             texture.Apply();
             return texture;
+        }
+
+        override
+        public string ToString()
+        {
+            return $"{name} : {type}";
         }
     }
 }

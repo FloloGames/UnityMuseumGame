@@ -19,6 +19,13 @@ namespace Grid
             TintColor = Color.white;
             GridObject = ScriptableObject.CreateInstance<GridObject>();
         }
+        public GridNode(int i, int j, GridObject gridObject)
+        {
+            I = i;
+            J = j;
+            TintColor = Color.white;
+            GridObject = gridObject;
+        }
         public void UpdateGameObject()
         {
             SpriteRenderer renderer = GameObject.GetComponent<SpriteRenderer>();

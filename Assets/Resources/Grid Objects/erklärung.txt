@@ -1,0 +1,3 @@
+Ordner nicht umbenennen oder verschieben!
+Muss im Resources Ordner sein damit wir sie laden können (ist eine Funktion von Unity).
+Alle GridObjects in diesem Ordner werden beim Starten des Spiels geladen damit man die Musen einfacher speichern kann.
