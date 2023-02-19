@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 936daa57f50b5c040881d35d83a10396, type: 3}
   m_Name: Empty
   m_EditorClassIdentifier: 
-  name: Empty
-  price: 50
-  paymentType: 0
+  showInPlaceItemsPanel: 1
   type: 0
+  paymentType: 0
+  name: Boden
+  price: 50
   editorPreview: {fileID: 0}
   finishedPrefab: {fileID: 0}
+  isComplexObject: 0
+  otherGridObjects: []

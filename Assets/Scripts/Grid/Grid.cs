@@ -12,9 +12,9 @@ namespace Grid
         private readonly int _width, _height;
         private GridNode[,] _gridArray;
         private Vector3 _originPosition;
+
         private float _cellSize;
-
-
+        public float CellSize => _cellSize;
 
         public Grid(int width, int height, float cellSize, Vector3 originPosition)
         {
@@ -76,7 +76,7 @@ namespace Grid
             textMesh.color = Color.white;
             return gameObject;
         }
-        private bool IndexInGrid(int i, int j)
+        public bool IndexInGrid(int i, int j)
         {
             return i >= 0 && j >= 0 && i < _width && j < _height;
         }

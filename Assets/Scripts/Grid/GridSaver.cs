@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 
 namespace Grid
@@ -22,7 +23,7 @@ namespace Grid
 
         private GridSaver()
         {
-            gridObjects = Resources.LoadAll<GridObject>("Grid Objects");
+            gridObjects = Resources.LoadAll<GridObject>("Grid Objects").Where(obj => obj.showInPlaceItemsPanel).ToArray();
 
             //Debug.Log($"Length {gridObjects.Length}");
             for (int i = 0; i < gridObjects.Length; i++)
@@ -32,10 +33,6 @@ namespace Grid
                     IndexOfEmpty = i;
                 //Debug.Log(o.ToString());
             }
-
-        }
-        private void SetIndices()
-        {
 
         }
         public int GetIndexOfGridObject(GridObject gridObject)

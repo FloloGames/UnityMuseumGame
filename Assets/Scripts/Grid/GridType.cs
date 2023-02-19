@@ -8,9 +8,14 @@ namespace Grid
     {
         EMPTY,//Boden Flur etc lauf area
         WALL, //Wand zerwtörbar aber nicht am Anfang erst später dann wird es auch noch verhärtete Wände geben 
-        GUARD, //Normaler Wächter 
-        LAZY_GUARD,//Sleeping guard
-        ART,//Gemälde oder statur oder antike shit
+        SITTING_GUARD, //Normaler Sitzender Wächter 
+        LAZY_GUARD,//Sitzender Schlafender wächter
+        MOVING_GUARD, // Bewegender Wächter zwischen zwei Punkten
+        PAINTING, //Gemälde
+        STATUE,//statur oder antike shit
+
+        //Not visible Types
+        MOVEMENT_POINT,
     }
 }
 
