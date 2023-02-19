@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "R58N70PCWVP",
         "name": "com.JoFloGames.UnityMuseumGame",
-        "processId": 14924,
+        "processId": 7503,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -18,6 +18,18 @@
             "deviceId": "R58N70PCWVP",
             "name": "com.JoFloGames.UnityMuseumGame",
             "processId": 14924,
+            "exited": false
+        },
+        {
+            "deviceId": "R58N70PCWVP",
+            "name": "com.JoFloGames.UnityMuseumGame",
+            "processId": 6824,
+            "exited": false
+        },
+        {
+            "deviceId": "R58N70PCWVP",
+            "name": "com.JoFloGames.UnityMuseumGame",
+            "processId": 7503,
             "exited": false
         }
     ],

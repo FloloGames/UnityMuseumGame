@@ -18,7 +18,10 @@ public class GridBuilder : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonUp(0) && !EditMenuCameraController.Dragging())
+        if (Input.touchCount <= 0)
+            return;
+
+        if (Input.GetTouch(0).phase == TouchPhase.Ended && !EditMenuCameraController.Dragging())
         {
             if (EventSystem.current.IsPointerOverGameObject())
                 return;

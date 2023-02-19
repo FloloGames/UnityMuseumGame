@@ -14,7 +14,7 @@ public class EditMenuCameraController : MonoBehaviour
     [SerializeField]
     private float moveSpeed = 5f;     // How fast the camera moves when the player drags their finger
     [SerializeField]
-    private float zoomSpeed = 0.5f;   // How fast the camera zooms in/out when the player pinches
+    private float zoomSpeed = 1f;   // How fast the camera zooms in/out when the player pinches
     [SerializeField]
     private float maxCameraZoom = 10;
     [SerializeField]
@@ -24,24 +24,26 @@ public class EditMenuCameraController : MonoBehaviour
 
     private Vector3 targetPosition;
     private Vector3 touchStartPos; // The position of the touch when the player first starts dragging
-    private Vector3 dragOffset;
+
 
     private float touchStartTime; // in seconds
 
-    private float targetSize;
-    private float startSize;
+    [SerializeField]
+    private float targetCamSize;
+    private float startWorldDist;
 
+    [SerializeField]
+    float multiplyer = 0.5f;
 
     private void Awake()
     {
-        targetSize = GetCameraSize();
+        targetCamSize = GetCameraSize();
         instance = this;
     }
     public static bool Dragging()
     {
         if (instance == null)
         {
-            Debug.Log("instance null");
             return false;
         }
         return instance.IsDragging();
@@ -49,7 +51,6 @@ public class EditMenuCameraController : MonoBehaviour
     private void Update()
     {
         //Debug.Log(EventSystem.current.IsPointerOverGameObject());
-        //Debug.Log(GetCameraSize());
         UpdateMoveCamera();
         MoveCamera();
         UpdateCameraSize();
@@ -63,12 +64,35 @@ public class EditMenuCameraController : MonoBehaviour
     }
     private void SizeCamera()
     {
-        float camSize = Mathf.Clamp(GetCameraSize(), targetSize, Time.deltaTime * zoomSpeed);
-        //_targetCamera.GetComponent<Camera>().orthographicSize = camSize;
+        float dist = Mathf.Abs(GetCameraSize() - targetCamSize);
+        if (dist < 0.5f)
+            return;
+
+        targetCamSize = Mathf.Clamp(targetCamSize, maxCameraZoom, minCameraZoom);
+        float camSize = Mathf.Lerp(GetCameraSize(), targetCamSize, Time.deltaTime * zoomSpeed);
+        _targetCamera.GetComponent<Camera>().orthographicSize = camSize;
     }
     private void UpdateCameraSize()
     {
-        Debug.Log(GetPressTime() + " " + Dragging());
+        if (Input.touchCount < 2)
+            return;
+
+        var touch1 = Input.GetTouch(0);
+        var touch2 = Input.GetTouch(1);
+
+        Vector2 touch1PrevPos = touch1.position - touch1.deltaPosition;
+        Vector2 touch2PrevPos = touch2.position - touch2.deltaPosition;
+
+        float currDist = (touch1.position - touch2.position).magnitude;
+        float prevDist = (touch1PrevPos - touch2PrevPos).magnitude;
+
+        float diff = currDist - prevDist;
+
+
+        Debug.Log(currDist + " " + prevDist);
+        Debug.Log(diff);
+
+        targetCamSize = GetCameraSize() - diff * multiplyer;
     }
     private void UpdateMoveCamera()
     {
@@ -76,7 +100,7 @@ public class EditMenuCameraController : MonoBehaviour
             return;
 
         Vector3 currTouchPos = GetCenterOfPresses();
-        if (Input.GetTouch(0).phase == TouchPhase.Began)
+        if (Input.GetTouch(0).phase == TouchPhase.Began) //Press started
         {
             touchStartTime = Time.time;
             touchStartPos = currTouchPos;
@@ -84,14 +108,10 @@ public class EditMenuCameraController : MonoBehaviour
         }
         if (Input.GetTouch(0).phase == TouchPhase.Moved) // If the player is dragging their finger
         {
-            dragOffset = touchStartPos - currTouchPos;
+            Vector3 dragOffset = touchStartPos - currTouchPos;
             targetPosition = _targetCamera.transform.position + dragOffset;
             return;
         }
-    }
-    private float GetCameraSize()
-    {
-        return _targetCamera.GetComponent<Camera>().orthographicSize;
     }
     private Vector3 GetCenterOfPresses()
     {
@@ -110,6 +130,10 @@ public class EditMenuCameraController : MonoBehaviour
     private float GetPressTime()
     {
         return Mathf.Abs(Time.time - touchStartTime);
+    }
+    private float GetCameraSize()
+    {
+        return _targetCamera.GetComponent<Camera>().orthographicSize;
     }
     //private void UpdateInputSystem()
     //{
