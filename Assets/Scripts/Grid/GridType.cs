@@ -8,6 +8,8 @@ namespace Grid
     {
         EMPTY,//Boden Flur etc lauf area
         WALL, //Wand zerwtörbar aber nicht am Anfang erst später dann wird es auch noch verhärtete Wände geben 
+        OTHER, //If you want to place other tile than the showing
+
         SITTING_GUARD, //Normaler Sitzender Wächter 
         LAZY_GUARD,//Sitzender Schlafender wächter
         MOVING_GUARD, // Bewegender Wächter zwischen zwei Punkten
@@ -16,6 +18,7 @@ namespace Grid
 
         //Not visible Types
         MOVEMENT_POINT,
+        WHERE_TO_PLACE_PAINTING,
     }
 }
 

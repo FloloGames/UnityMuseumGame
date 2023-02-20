@@ -33,5 +33,6 @@ public class PlaceItem : MonoBehaviour
     public void SelectButtonPressed()
     {
         GridBuilder.SetSelectedPlaceIndex(itemIndex);
+        SelectedItemTile.RemoveCurrentSpawnedItemTile();
     }
 }

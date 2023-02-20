@@ -28,36 +28,34 @@ namespace Grid
                 for (int j = 0; j < _gridArray.GetLength(1); j++)
                 {
 
-                    _gridArray[i, j] = new GridNode(i, j);
+                    Color color = GetNodeColor(i, j);
+                    _gridArray[i, j] = new GridNode(i, j, color);
                 }
             }
         }
         public void CreateWorldUI()
         {
+            Transform parent = new GameObject("GridNodesHolder").transform;
             for (int i = 0; i < _gridArray.GetLength(0); i++)
             {
                 for (int j = 0; j < _gridArray.GetLength(1); j++)
                 {
-                    Color color = GetNodeColor(i, j);
-                    GameObject go = CreateImageTile(i, j, color);
+                    GameObject go = CreateImageTile(i, j, parent);
                     _gridArray[i, j].GameObject = go;
+                    _gridArray[i, j].UpdateGameObject();
                     //CreateWorldText(i + ":" + j, IndexToWorldPosition(i, j));
-
                 }
             }
         }
-        private GameObject CreateImageTile(int i, int j, Color color)
+        private GameObject CreateImageTile(int i, int j, Transform parent)
         {
             Vector3 position = IndexToWorldPosition(i, j);
             GameObject gameObject = new GameObject($"ImgTile {i}:{j}", typeof(SpriteRenderer));
             Transform transform = gameObject.transform;
+            transform.parent = parent;
             transform.localScale = new Vector3(_cellSize, _cellSize, 1);
             transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
             transform.localPosition = position;
-            SpriteRenderer renderer = gameObject.GetComponent<SpriteRenderer>();
-            GridNode node = _gridArray[i, j];
-            renderer.sprite = node.GridObject.editorPreview;
-            renderer.color = color;
             return gameObject;
         }
         private GameObject CreateWorldText(string text, Vector3 position = default, Transform parent = null, int fontSize = 40, TextAnchor textAnchor = TextAnchor.MiddleCenter, TextAlignment textAlignment = TextAlignment.Center)

@@ -15,7 +15,7 @@ MonoBehaviour:
   showInPlaceItemsPanel: 1
   type: 0
   paymentType: 0
-  name: Boden
+  name: "L\xF6schen"
   price: 50
   editorPreview: {fileID: 0}
   finishedPrefab: {fileID: 0}

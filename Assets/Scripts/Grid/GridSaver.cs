@@ -18,27 +18,25 @@ namespace Grid
                 return _instance;
             }
         }
-        public int IndexOfEmpty { get; }
-        public readonly GridObject[] gridObjects;
+
+        public readonly GridObjectManager GridObjectManager;
 
         private GridSaver()
         {
-            gridObjects = Resources.LoadAll<GridObject>("Grid Objects").Where(obj => obj.showInPlaceItemsPanel).ToArray();
-
-            //Debug.Log($"Length {gridObjects.Length}");
-            for (int i = 0; i < gridObjects.Length; i++)
-            {
-                GridObject o = gridObjects[i];
-                if (o.type == GridType.EMPTY)
-                    IndexOfEmpty = i;
-                //Debug.Log(o.ToString());
-            }
-
+            GridObjectManager = Resources.Load<GridObjectManager>("Grid Objects/GridObjectManager");
         }
-        public int GetIndexOfGridObject(GridObject gridObject)
+
+        public int GetFirstPlaceItemIndexByType(GridType gridType)
         {
+            for (int i = 0; i < GridObjectManager.PlaceItemsPanelList.Count; i++)
+            {
+                var placeItem = GridObjectManager.PlaceItemsPanelList[i];
+                if (placeItem.type == gridType)
+                {
+                    return i;
+                }
+            }
             return -1;
         }
-
     }
 }

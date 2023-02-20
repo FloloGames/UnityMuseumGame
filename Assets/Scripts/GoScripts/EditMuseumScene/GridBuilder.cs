@@ -6,7 +6,10 @@ using UnityEngine.EventSystems;
 
 public class GridBuilder : MonoBehaviour
 {
-    private static int SelectedPlaceItemIndex;
+    private static GridBuilder _instance;
+    public static GridBuilder Instance => _instance;
+
+    public int SelectedPlaceItemIndex;
     [Header("Prefabs")]
     [SerializeField]
     private GameObject selectedItemPrefab;
@@ -15,46 +18,55 @@ public class GridBuilder : MonoBehaviour
     [SerializeField]
     private float selectedItemMovementSpeed = 3f;
 
+    private Grid.Grid _grid;
+    public Grid.Grid Grid => _grid;
 
-    private GameObject selectedItemInstance;
-
-    private Grid.Grid grid;
-
-    private Vector3 selectedItemTargetPos;
-    private Vector2 selectedGridIndex;
-
+    private void Awake()
+    {
+        _instance = this;
+    }
     void Start()
     {
-        grid = new Grid.Grid(10, 10, 5f, new Vector3(-10, 0, -10));
-        grid.CreateWorldUI();
-        SelectedPlaceItemIndex = GridSaver.Instance.IndexOfEmpty;
-        selectedGridIndex = new Vector2();
-        selectedItemInstance = Instantiate(selectedItemPrefab, new Vector3(), Quaternion.Euler(90, 0, 0));
-        selectedItemInstance.transform.localScale = new Vector3(grid.CellSize, grid.CellSize, 1);
-        selectedItemTargetPos = grid.IndexToWorldPosition(0, 0);
+        _grid = new Grid.Grid(20, 20, 2f, new Vector3(-10, 0, -10));
+        _grid.CreateWorldUI();
+        SelectedPlaceItemIndex = GridSaver.Instance.GetFirstPlaceItemIndexByType(GridType.EMPTY);
+        SelectedItemTile.Init(selectedItemPrefab);
     }
 
     void Update()
     {
-        UpdateSelectedItemInstance();
         if (Input.touchCount <= 0)
             return;
 
-        Debug.Log("Clicked UI: " + EventSystem.current.IsPointerOverGameObject());
+        bool onGUI = EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId);
 
         if (Input.GetTouch(0).phase == TouchPhase.Ended && !EditMenuCameraController.Dragging())
         {
-            if (EventSystem.current.IsPointerOverGameObject())
+            if (onGUI)
+            {
+                Debug.Log("Touch is on a UI element");
                 return;
+            }
             Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            grid.WorldPositionToIndex(worldPoint, out int i, out int j);
-            if (!grid.IndexInGrid(i, j))
+            _grid.WorldPositionToIndex(worldPoint, out int i, out int j);
+            if (!_grid.IndexInGrid(i, j))
                 return;
-            selectedGridIndex.Set(i, j);
-            selectedItemTargetPos = grid.IndexToWorldPosition(i, j);
-            selectedItemTargetPos.y = 1;
-            //GridNode node = new GridNode(i, j, GridSaver.Instance.gridObjects[SelectedPlaceItemIndex]);
-            //grid.SetValueNotGameObject(i, j, node);
+
+            //if (GridSaver.Instance.gridObjects[SelectedPlaceItemIndex].type != GridType.OTHER)
+            //{
+            //    GridNode node = new GridNode(i, j, Color.white, GridSaver.Instance.gridObjects[SelectedPlaceItemIndex]);
+            //    _grid.SetValueNotGameObject(i, j, node);
+            //    return;
+            //}
+
+            if (SelectedItemTile.Index.x == i && SelectedItemTile.Index.y == j)
+            {
+                SelectedItemTile.RemoveCurrentSpawnedItemTile();
+                SelectedItemTile.ResetIndex();
+                return;
+            }
+            SelectedItemTile.SpawnNewSelectedItemTile(i, j);
+
         }
         //else if (Input.GetMouseButtonDown(1))
         //{
@@ -70,12 +82,8 @@ public class GridBuilder : MonoBehaviour
         //    Debug.Log(node.ToString());
         //}
     }
-    private void UpdateSelectedItemInstance()
-    {
-        selectedItemInstance.transform.position = Vector3.Lerp(selectedItemInstance.transform.position, selectedItemTargetPos, Time.deltaTime * selectedItemMovementSpeed);
-    }
     public static void SetSelectedPlaceIndex(int i)
     {
-        SelectedPlaceItemIndex = i;
+        GridBuilder.Instance.SelectedPlaceItemIndex = i;
     }
 }

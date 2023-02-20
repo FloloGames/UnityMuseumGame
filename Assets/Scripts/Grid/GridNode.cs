@@ -12,18 +12,18 @@ namespace Grid
         public int I { get; }
         public int J { get; }
 
-        public GridNode(int i, int j)
+        public GridNode(int i, int j, Color color)
         {
             I = i;
             J = j;
-            TintColor = Color.white;
+            TintColor = color;
             GridObject = ScriptableObject.CreateInstance<GridObject>();
         }
-        public GridNode(int i, int j, GridObject gridObject)
+        public GridNode(int i, int j, Color color, GridObject gridObject)
         {
             I = i;
             J = j;
-            TintColor = Color.white;
+            TintColor = color;
             GridObject = gridObject;
         }
         public void UpdateGameObject()

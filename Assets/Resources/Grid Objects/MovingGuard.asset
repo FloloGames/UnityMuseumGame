@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 936daa57f50b5c040881d35d83a10396, type: 3}
-  m_Name: TestObject
+  m_Name: MovingGuard
   m_EditorClassIdentifier: 
-  showInPlaceItemsPanel: 1
-  type: 4
+  showInPlaceItemsPanel: 0
+  type: 5
   paymentType: 0
   name: Moving Guard
   price: 100
