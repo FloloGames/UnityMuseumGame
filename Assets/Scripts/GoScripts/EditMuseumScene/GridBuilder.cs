@@ -14,10 +14,6 @@ public class GridBuilder : MonoBehaviour
     [SerializeField]
     private GameObject selectedItemPrefab;
 
-    [Header("Constants")]
-    [SerializeField]
-    private float selectedItemMovementSpeed = 3f;
-
     private Grid.Grid _grid;
     public Grid.Grid Grid => _grid;
 

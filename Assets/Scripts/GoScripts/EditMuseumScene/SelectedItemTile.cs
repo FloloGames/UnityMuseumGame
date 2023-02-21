@@ -43,7 +43,7 @@ public class SelectedItemTile
         gameObject.transform.localScale = new Vector3();
         LeanTween.scale(gameObject, targetScale, time).setEaseOutBack();
         CurrentSpawnedItem = gameObject;
-        EditMuseumSceneUIManager.Instance.OpenPanel(EditMuseumSceneUIManager.Panel.ACTION);
+        EditMuseumSceneUIManager.Instance.OpenPanel("ACTION");
     }
     public static void RemoveCurrentSpawnedItemTile()
     {
@@ -53,7 +53,7 @@ public class SelectedItemTile
             LeanTween.scale(CurrentSpawnedItem, new Vector3(), time).setEaseInBack();
             GameObject.Destroy(CurrentSpawnedItem, time);
         }
-        EditMuseumSceneUIManager.Instance.OpenPanel(EditMuseumSceneUIManager.Panel.PLACE);
+        EditMuseumSceneUIManager.Instance.OpenPanel(EditMuseumSceneUIManager.TOP_PANEL_NAME);
     }
     public static void ResetIndex()
     {
