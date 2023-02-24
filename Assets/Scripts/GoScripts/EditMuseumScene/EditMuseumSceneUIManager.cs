@@ -10,7 +10,7 @@ public class EditMuseumSceneUIManager : MonoBehaviour
     [Serializable]
     public class PanelContainer
     {
-        public static float animationTime = 1.5f;
+        public static float animationTime = 0.5f;
         public string name;
         public RectTransform PanelTransform;
         public float OpenPos;
@@ -30,7 +30,7 @@ public class EditMuseumSceneUIManager : MonoBehaviour
         {
             PanelTransform.anchoredPosition = new Vector3(0, ClosedPos, 0);
         }
-        public async Task CloseAsync(bool animation = false)
+        public IEnumerator CloseAsync(bool animation = false)
         {
             if (LeanTween.isTweening(PanelTransform))
             {
@@ -39,10 +39,8 @@ public class EditMuseumSceneUIManager : MonoBehaviour
             if (animation)
             {
                 TaskCompletionSource<object> taskCompletion = new TaskCompletionSource<object>();
-
                 PanelTransform.LeanMoveY(ClosedPos, animationTime).setEaseInBack().setOnComplete(() => { taskCompletion.SetResult(null); });
-
-                await taskCompletion.Task;
+                yield return new WaitUntil(() => taskCompletion.Task.IsCompleted);
             }
             else
             {
@@ -54,16 +52,14 @@ public class EditMuseumSceneUIManager : MonoBehaviour
             PanelTransform.anchoredPosition = new Vector3(0, OpenPos, 0);
 
         }
-        public async Task OpenAsync(bool animation = false)
+        public IEnumerator OpenAsync(bool animation = false)
         {
+
             if (animation)
             {
                 TaskCompletionSource<object> taskCompletion = new TaskCompletionSource<object>();
-
                 PanelTransform.LeanMoveY(OpenPos, animationTime).setEaseOutBack().setOnComplete(() => { taskCompletion.SetResult(null); });
-
-                await taskCompletion.Task;
-
+                yield return new WaitUntil(() => taskCompletion.Task.IsCompleted);
             }
             else
             {
@@ -74,7 +70,7 @@ public class EditMuseumSceneUIManager : MonoBehaviour
     [Serializable]
     public class PanelContainerManager
     {
-        public int CurrSelectedPanel = 0;
+        public int CurrSelectedPanel = -1;
         public List<PanelContainer> Panels;
         public void SetEveryPanelToClosedSkip()
         {
@@ -94,46 +90,50 @@ public class EditMuseumSceneUIManager : MonoBehaviour
                 panel.SetActive(value);
             }
         }
-        public async Task CloseCurrAndOpenNewPanelAsync(string panelName)
+        public IEnumerator CloseCurrAndOpenNewPanelAsync(string panelName)
         {
             int index = GetPanelIndexByName(panelName);
-            if (index == -1)
-                return;
-            await ClosePanel(CurrSelectedPanel, true);
-            CurrSelectedPanel = index;
-            await OpenPanel(index);
-        }
-        public async Task ClosePanel(string panelName, bool animation)
-        {
-            int index = GetPanelIndexByName(panelName);
-            if (index == -1)
-                return;
-            await ClosePanel(index, animation);
-        }
-        public async Task ClosePanel(int index, bool animation = false)
-        {
-            if (index >= Panels.Count)
+            if (index != -1 && CurrSelectedPanel != index)
             {
-                Debug.LogError("Index Out of Bounce! " + index);
-                return;
+                yield return CoroutineManager.Instance.StartCoroutine(CloseSelectedCurrPanel(true));
+                CurrSelectedPanel = index;
+                yield return CoroutineManager.Instance.StartCoroutine(OpenPanel(index, true));
             }
-            await Panels[index].CloseAsync(animation);
         }
-        public async Task OpenPanel(string panelName, bool animation = false)
+        public IEnumerator ClosePanel(string panelName, bool animation)
         {
             int index = GetPanelIndexByName(panelName);
             if (index == -1)
-                return;
-            await OpenPanel(index, animation);
+                yield return null;
+            yield return ClosePanel(index, animation);
         }
-        public async Task OpenPanel(int index, bool animation = false)
+        public IEnumerator ClosePanel(int index, bool animation = false)
         {
-            if (index >= Panels.Count)
+            if (index < Panels.Count && index >= 0)
             {
-                Debug.LogError("Index Out of Bounce! " + index);
-                return;
+                yield return CoroutineManager.Instance.StartCoroutine(Panels[index].CloseAsync(animation));
             }
-            await Panels[index].OpenAsync(animation);
+        }
+        public IEnumerator CloseSelectedCurrPanel(bool animation = false)
+        {
+            if (CurrSelectedPanel != -1)
+            {
+                yield return CoroutineManager.Instance.StartCoroutine(ClosePanel(CurrSelectedPanel, animation));
+            }
+        }
+        public IEnumerator OpenPanel(string panelName, bool animation = false)
+        {
+            int index = GetPanelIndexByName(panelName);
+            if (index == -1)
+                yield return null;
+            yield return OpenPanel(index, animation);
+        }
+        public IEnumerator OpenPanel(int index, bool animation = false)
+        {
+            if (index < Panels.Count && index >= 0)
+            {
+                yield return CoroutineManager.Instance.StartCoroutine(Panels[index].OpenAsync(animation));
+            }
         }
         private int GetPanelIndexByName(string panelName)
         {
@@ -161,8 +161,7 @@ public class EditMuseumSceneUIManager : MonoBehaviour
     [SerializeField]
     public PanelContainerManager BottomPanelsManager;
 
-
-    private void Awake()
+    private void Start()
     {
         _instance = this;
         TopPanelsManager.SetEveryPanelToClosedSkip();
@@ -171,47 +170,10 @@ public class EditMuseumSceneUIManager : MonoBehaviour
         TopPanelsManager.SetEveryPanelObjectActive(true);
         BottomPanelsManager.SetEveryPanelObjectActive(true);
         OpenPanel(TOP_PANEL_NAME);
-        //OpenPanel(BOTTOM_PANEL_NAME);
     }
     public void OpenPanel(string panelName)
     {
-        StartCoroutine(OpenPanelRnumerator(panelName));
+        StartCoroutine(TopPanelsManager.CloseCurrAndOpenNewPanelAsync(panelName));
+        StartCoroutine(BottomPanelsManager.CloseCurrAndOpenNewPanelAsync(panelName));
     }
-    private IEnumerator OpenPanelRnumerator(string panelName)
-    {
-        Task t1 = TopPanelsManager.CloseCurrAndOpenNewPanelAsync(panelName);
-        Task t2 = BottomPanelsManager.CloseCurrAndOpenNewPanelAsync(panelName);
-        yield return new WaitUntil(() => t1.IsCompleted && t2.IsCompleted);
-    }
-    //public void OpenPanels(params string[] panelNames)
-    //{
-    //    int[] indices = new int[panelNames.Length];
-    //    for (int i = 0; i < indices.Length; i++)
-    //    {
-    //        string panelName = panelNames[i];
-    //        int index = GetPanelIndexByName(panelName);
-    //        indices[i] = index;
-    //    }
-
-
-    //    ClosePanelsAnim(SelectedPanelIndices, OpenPanelAnim, index);
-    //    SelectedPanelIndex = index;
-
-
-    //    //if (panel == Panel.PLACE)
-    //    //{
-    //    //    BottomPanel.LeanMoveY(BottomPanelClosedPos, time).setEaseInBack().setOnComplete(() =>
-    //    //    {
-    //    //        TopPanel.LeanMoveY(TopPanelOpenPos, time).setEaseOutBack();
-    //    //    });
-    //    //}
-    //    //else if (panel == Panel.ACTION)
-    //    //{
-    //    //    TopPanel.LeanMoveY(TopPanelClosedPos, time).setEaseInBack().setOnComplete(() =>
-    //    //    {
-    //    //        BottomPanel.LeanMoveY(BottomPanelOpenPos, time).setEaseOutBack();
-    //    //    });
-    //    //}
-    //    //selectedPanel = panel;
-    //}
 }
