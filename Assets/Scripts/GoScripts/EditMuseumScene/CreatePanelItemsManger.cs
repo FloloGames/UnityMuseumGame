@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Creates all UI Items
+/// <para>uses the <see cref="GridObjectLoader.Instance"/> to get all the Data</para>
+/// </summary>
 public class CreatePanelItemsManger : MonoBehaviour
 {
     [SerializeField]
@@ -14,11 +18,16 @@ public class CreatePanelItemsManger : MonoBehaviour
     [SerializeField]
     private GameObject PlaceItemPrefab;
 
-    void Awake()
+    private void Awake()
     {
-        for (int i = 0; i < GridSaver.Instance.GridObjectManager.PlaceItemsPanelList.Count; i++)
+        CreateTopPanelItemsUI();
+        CreateBottomPanelItemsUI();
+    }
+    private void CreateTopPanelItemsUI()
+    {
+        for (int i = 0; i < GridObjectLoader.Instance.GridObjectManager.TopPanelItemsList.Count; i++)
         {
-            var obj = GridSaver.Instance.GridObjectManager.PlaceItemsPanelList[i];
+            var obj = GridObjectLoader.Instance.GridObjectManager.TopPanelItemsList[i];
             GameObject gameObject = Instantiate(PlaceItemPrefab, TopPanel);
             PlaceItem placeItem = gameObject.GetComponent<PlaceItem>();
             placeItem.SetNameText(obj.name);
@@ -26,9 +35,12 @@ public class CreatePanelItemsManger : MonoBehaviour
             placeItem.SetSprite(obj.editorPreview);
             placeItem.SetItemIndex(i);
         }
-        for (int i = 0; i < GridSaver.Instance.GridObjectManager.ActionItemsPanelList.Count; i++)
+    }
+    private void CreateBottomPanelItemsUI()
+    {
+        for (int i = 0; i < GridObjectLoader.Instance.GridObjectManager.BottomPanelItemsList.Count; i++)
         {
-            var obj = GridSaver.Instance.GridObjectManager.ActionItemsPanelList[i];
+            var obj = GridObjectLoader.Instance.GridObjectManager.BottomPanelItemsList[i];
             GameObject gameObject = Instantiate(PlaceItemPrefab, BottomPanel);
             PlaceItem placeItem = gameObject.GetComponent<PlaceItem>();
             placeItem.SetNameText(obj.name);

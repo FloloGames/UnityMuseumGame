@@ -24,7 +24,6 @@ namespace Grid
         /// </summary>
         public List<GridObject> otherGridObjects;
 
-
         private void OnEnable()
         {
             if (editorPreview == null)
@@ -46,7 +45,9 @@ namespace Grid
         }
     }
 
-
+    /// <summary>
+    /// Class to manage the <see cref="GridObject"/> Inspector 
+    /// </summary>
     [CustomEditor(typeof(GridObject))]
     public class GridObjectEditor : Editor
     {
@@ -75,7 +76,8 @@ namespace Grid
             price = serializedObject.FindProperty("price");
         }
 
-        override public void OnInspectorGUI()
+        override
+        public void OnInspectorGUI()
         {
             serializedObject.Update();
 

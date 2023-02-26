@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class EditMenuCameraController : MonoBehaviour
+public class EditMenu_CameraController : MonoBehaviour
 {
-    private static EditMenuCameraController instance;
+    private static EditMenu_CameraController instance;
 
     [Header("Constants")]
     [SerializeField]
@@ -30,7 +30,6 @@ public class EditMenuCameraController : MonoBehaviour
 
     [SerializeField]
     private float targetCamSize;
-    private float startWorldDist;
 
     [SerializeField]
     float multiplyer = 0.5f;

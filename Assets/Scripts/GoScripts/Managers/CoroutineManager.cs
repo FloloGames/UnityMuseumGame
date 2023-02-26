@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoroutineManager : MonoBehaviour
+namespace Managers
 {
-    public static CoroutineManager Instance { get; private set; }
-
-    private void Awake()
+    public class CoroutineManager : MonoBehaviour
     {
-        Instance = this;
+        public static CoroutineManager Instance { get; private set; }
+
+        private void Awake()
+        {
+            Instance = this;
+        }
     }
 }
