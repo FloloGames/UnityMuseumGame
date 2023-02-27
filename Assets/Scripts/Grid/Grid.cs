@@ -1,3 +1,4 @@
+using Help;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -131,5 +132,33 @@ namespace Grid
         {
             return (i + j) % 2 == 0 ? evenColor : oddColor;
         }
+        public Vector2Int ClampIndexIntoGrid(int i, int j)
+        {
+            int _i = Mathf.Clamp(i, 0, _gridArray.GetLength(0) - 1);
+            int _j = Mathf.Clamp(j, 0, _gridArray.GetLength(1) - 1);
+            return new Vector2Int(_i, _j);
+        }
+        //public Vector2 GetScreenCellSize(Vector3 worldPosition)
+        //{
+        //    WorldPositionToIndex(worldPosition, out int i, out int j);
+
+        //    Debug.Log("Index: " + i + " " + j);
+
+        //    return GetScreenCellSize(i, j);
+        //}
+        //public Vector2 GetScreenCellSize(int i, int j)
+        //{
+        //    if (!IndexInGrid(i, j))
+        //        return Vector2.zero;
+        //    Camera mainCamera = Camera.main;
+        //    Vector3 screenPos = mainCamera.WorldToScreenPoint(_gridArray[i, j].GameObject.transform.position);
+        //    // Calculate the pixel width and height of the object
+        //    float pixelWidth = 5f * Screen.width / mainCamera.orthographicSize / screenPos.z;
+        //    float pixelHeight = 5f * Screen.height / mainCamera.orthographicSize / screenPos.z;
+
+        //    Debug.Log("Pixel size: " + pixelWidth + " x " + pixelHeight);
+
+        //    return new Vector2(pixelWidth, pixelHeight);
+        //}
     }
 }

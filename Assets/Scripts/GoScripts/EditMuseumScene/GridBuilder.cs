@@ -65,6 +65,7 @@ namespace Grid
                 {
                     SelectedTileItemManager.RemoveCurrentSpawnedItemTile();
                     SelectedTileItemManager.ResetIndex();
+                    UIPanelManager.Instance.OpenPanel(UIPanelManager.TOP_PANEL_NAME);
                     return;
                 }
                 SelectedTileItemManager.SpawnNewSelectedItemTile(i, j);

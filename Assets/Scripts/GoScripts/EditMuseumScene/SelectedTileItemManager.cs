@@ -15,6 +15,7 @@ namespace Managers
         private static GameObject itemPrefab;
         private static GameObject CurrentSpawnedItem;
         private static Vector2 _index;
+        private static int currentMovingId;
 
         public static Vector2 Index
         {
@@ -62,11 +63,26 @@ namespace Managers
                 LeanTween.scale(CurrentSpawnedItem, new Vector3(), time).setEaseInBack();
                 Object.Destroy(CurrentSpawnedItem, time);
             }
-            UIPanelManager.Instance.OpenPanel(UIPanelManager.TOP_PANEL_NAME);
         }
         public static void ResetIndex()
         {
             _index.Set(-1, -1);
+        }
+        public static void MoveCurrentTileItem(int i, int j)
+        {
+            if (CurrentSpawnedItem == null)
+                return;
+
+            if (currentMovingId != -1 && LeanTween.isTweening(currentMovingId))
+            {
+                LeanTween.cancel(currentMovingId);
+                currentMovingId = -1;
+            }
+            _index.Set(i, j);
+            float animTime = 0.25f;
+            Vector3 targetPosition = GridBuilder.Instance.Grid.IndexToWorldPosition(i, j);
+            targetPosition.y = 1f;
+            currentMovingId = CurrentSpawnedItem.transform.LeanMove(targetPosition, animTime).setEaseOutCubic().setOnComplete(() => { currentMovingId = -1; }).id;
         }
     }
 }

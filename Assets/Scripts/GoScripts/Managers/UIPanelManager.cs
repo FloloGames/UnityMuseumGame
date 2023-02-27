@@ -167,6 +167,7 @@ namespace Managers
             TopPanelsManager.SetEveryPanelObjectActive(true);
             BottomPanelsManager.SetEveryPanelObjectActive(true);
             OpenPanel(TOP_PANEL_NAME);
+            OpenPanel(BOTTOM_PANEL_NAME);
         }
         public void OpenPanel(string panelName)
         {

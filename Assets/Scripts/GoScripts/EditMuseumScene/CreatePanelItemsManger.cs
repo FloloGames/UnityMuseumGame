@@ -81,6 +81,7 @@ namespace Managers
                 placeItem.SetNameText(complexObject.displayName);
                 placeItem.SetSprite(complexObject.editorPreview);
                 placeItem.SetItemIndex(i);
+                placeItem.SetParentPanel(ActionPanel.transform as RectTransform);
             }
         }
     }

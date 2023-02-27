@@ -43,5 +43,6 @@ public class PlaceItem : MonoBehaviour
         GridObject gridObject = gridItems[itemIndex];
         GridBuilder.SetSelectedPlaceIndex(itemIndex, gridObject);
         SelectedTileItemManager.RemoveCurrentSpawnedItemTile();
+        UIPanelManager.Instance.OpenPanel(UIPanelManager.TOP_PANEL_NAME);
     }
 }
