@@ -15,9 +15,10 @@ MonoBehaviour:
   showInPlaceItemsPanel: 1
   type: 2
   paymentType: 0
+  displayName: Selection
   name: Selection
   price: 0
   editorPreview: {fileID: 0}
   finishedPrefab: {fileID: 0}
   isComplexObject: 0
-  otherGridObjects: []
+  complexGridObjects: []

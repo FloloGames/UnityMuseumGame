@@ -18,3 +18,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1d11e961b6ba0eb4fb435e2ae52c3614, type: 2}
   BottomPanelItemsList:
   - {fileID: 11400000, guid: 6ec7b0a9d890855409f2d63fd99d3d93, type: 2}
+  - {fileID: 11400000, guid: 75d532230db813348a6da5f12ef0d88b, type: 2}

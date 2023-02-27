@@ -1,3 +1,6 @@
+using Help;
+using Managers;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -14,8 +17,12 @@ namespace Grid
         [SerializeField]
         private GameObject selectedItemPrefab;
 
+        private GridObject SelectedItem;
+
         private Grid _grid;
         public Grid Grid => _grid;
+
+        private bool clickOnGUI = false;
 
         private void Awake()
         {
@@ -26,7 +33,7 @@ namespace Grid
             _grid = new Grid(20, 20, 2f, new Vector3(-10, 0, -10));
             _grid.CreateWorldUI();
             SelectedPlaceItemIndex = GridObjectLoader.Instance.GetItemIndexByType(GridType.EMPTY);
-            SelectedItemTile.Init(selectedItemPrefab);
+            SelectedTileItemManager.Init(selectedItemPrefab);
         }
 
         private void Update()
@@ -34,52 +41,42 @@ namespace Grid
             if (Input.touchCount <= 0)
                 return;
 
-            bool onGUI = EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId);
 
             if (Input.GetTouch(0).phase == TouchPhase.Ended && !EditMenu_CameraController.Dragging())
             {
-                if (onGUI)
-                {
-                    Debug.Log("Touch is on a UI element");
+                if (clickOnGUI)
                     return;
-                }
+
                 Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 _grid.WorldPositionToIndex(worldPoint, out int i, out int j);
                 if (!_grid.IndexInGrid(i, j))
                     return;
 
-                //if (GridSaver.Instance.gridObjects[SelectedPlaceItemIndex].type != GridType.OTHER)
-                //{
-                //    GridNode node = new GridNode(i, j, Color.white, GridSaver.Instance.gridObjects[SelectedPlaceItemIndex]);
-                //    _grid.SetValueNotGameObject(i, j, node);
-                //    return;
-                //}
-
-                if (SelectedItemTile.Index.x == i && SelectedItemTile.Index.y == j)
+                if (SelectedItem.type != GridType.SELECT)
                 {
-                    SelectedItemTile.RemoveCurrentSpawnedItemTile();
-                    SelectedItemTile.ResetIndex();
+                    GridNode node = new GridNode(i, j, Color.white, SelectedItem);
+                    _grid.SetValueNotGameObject(i, j, node);
                     return;
                 }
-                SelectedItemTile.SpawnNewSelectedItemTile(i, j);
 
+
+
+                if (SelectedTileItemManager.Index.x == i && SelectedTileItemManager.Index.y == j)
+                {
+                    SelectedTileItemManager.RemoveCurrentSpawnedItemTile();
+                    SelectedTileItemManager.ResetIndex();
+                    return;
+                }
+                SelectedTileItemManager.SpawnNewSelectedItemTile(i, j);
+                GridNode gridNode = Grid.GetValue(i, j);
+                CreatePanelItemsManger.Instance.ClearActionPanelItems();
+                CreatePanelItemsManger.Instance.CreateActionPanelItems(gridNode.GridObject);
             }
-            //else if (Input.GetMouseButtonDown(1))
-            //{
-            //    Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //    grid.WorldPositionToIndex(worldPoint, out int i, out int j);
-            //    GridNode node = new GridNode(i, j, GridSaver.Instance.gridObjects[1]);
-            //    grid.SetValueNotGameObject(i, j, node);
-            //}
-            //else if (Input.GetMouseButtonDown(2))
-            //{
-            //    Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //    GridNode node = grid.GetValue(worldPoint);
-            //    Debug.Log(node.ToString());
-            //}
+            clickOnGUI = HelperFunctions.IsCurrFirstTouchOnGUI();
         }
-        public static void SetSelectedPlaceIndex(int i)
+        public static void SetSelectedPlaceIndex(int i, GridObject gridObject)
         {
+            Instance.SelectedItem = gridObject;
             Instance.SelectedPlaceItemIndex = i;
         }
     }

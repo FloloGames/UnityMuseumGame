@@ -1,52 +1,87 @@
 using Grid;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Creates all UI Items
-/// <para>uses the <see cref="GridObjectLoader.Instance"/> to get all the Data</para>
-/// </summary>
-public class CreatePanelItemsManger : MonoBehaviour
+namespace Managers
 {
-    [SerializeField]
-    private Transform TopPanel;
-    [SerializeField]
-    private Transform ActionsPanel;
-    [SerializeField]
-    private Transform BottomPanel;
-    [SerializeField]
-    private GameObject PlaceItemPrefab;
+    /// <summary>
+    /// Creates all UI Items
+    /// <para>uses the <see cref="GridObjectLoader.Instance"/> to get all the Data</para>
+    /// </summary>
+    public class CreatePanelItemsManger : MonoBehaviour
+    {
+        private static CreatePanelItemsManger _instance;
+        public static CreatePanelItemsManger Instance => _instance;
 
-    private void Awake()
-    {
-        CreateTopPanelItemsUI();
-        CreateBottomPanelItemsUI();
-    }
-    private void CreateTopPanelItemsUI()
-    {
-        for (int i = 0; i < GridObjectLoader.Instance.GridObjectManager.TopPanelItemsList.Count; i++)
+        [Header("Prefabs")]
+        [SerializeField]
+        private GameObject ActionItemPrefab;
+        [SerializeField]
+        private GameObject PlaceItemPrefab;
+
+        [Header("References")]
+        [SerializeField]
+        private Transform TopPanel;
+        [SerializeField]
+        private Transform ActionPanel;
+        [SerializeField]
+        private Transform BottomPanel;
+
+        private void Awake()
         {
-            var obj = GridObjectLoader.Instance.GridObjectManager.TopPanelItemsList[i];
-            GameObject gameObject = Instantiate(PlaceItemPrefab, TopPanel);
-            PlaceItem placeItem = gameObject.GetComponent<PlaceItem>();
-            placeItem.SetNameText(obj.name);
-            placeItem.SetPriceText(obj.price.ToString());
-            placeItem.SetSprite(obj.editorPreview);
-            placeItem.SetItemIndex(i);
+            _instance = this;
+            CreateTopPanelItemsUI();
+            CreateBottomPanelItemsUI();
         }
-    }
-    private void CreateBottomPanelItemsUI()
-    {
-        for (int i = 0; i < GridObjectLoader.Instance.GridObjectManager.BottomPanelItemsList.Count; i++)
+        private void CreateTopPanelItemsUI()
         {
-            var obj = GridObjectLoader.Instance.GridObjectManager.BottomPanelItemsList[i];
-            GameObject gameObject = Instantiate(PlaceItemPrefab, BottomPanel);
-            PlaceItem placeItem = gameObject.GetComponent<PlaceItem>();
-            placeItem.SetNameText(obj.name);
-            placeItem.SetPriceText(obj.price.ToString());
-            placeItem.SetSprite(obj.editorPreview);
-            placeItem.SetItemIndex(i);
+            for (int i = 0; i < GridObjectLoader.Instance.GridObjectManager.TopPanelItemsList.Count; i++)
+            {
+                var obj = GridObjectLoader.Instance.GridObjectManager.TopPanelItemsList[i];
+                GameObject gameObject = Instantiate(PlaceItemPrefab, TopPanel);
+                PlaceItem placeItem = gameObject.GetComponent<PlaceItem>();
+                placeItem.SetNameText(obj.displayName);
+                placeItem.SetPriceText(obj.price.ToString());
+                placeItem.SetSprite(obj.editorPreview);
+                placeItem.SetItemIndex(i);
+                placeItem.SetGridItems(GridObjectLoader.Instance.GridObjectManager.TopPanelItemsList);
+            }
+        }
+        private void CreateBottomPanelItemsUI()
+        {
+            for (int i = 0; i < GridObjectLoader.Instance.GridObjectManager.BottomPanelItemsList.Count; i++)
+            {
+                var obj = GridObjectLoader.Instance.GridObjectManager.BottomPanelItemsList[i];
+                GameObject gameObject = Instantiate(PlaceItemPrefab, BottomPanel);
+                PlaceItem placeItem = gameObject.GetComponent<PlaceItem>();
+                placeItem.SetNameText(obj.displayName);
+                placeItem.SetPriceText(obj.price.ToString());
+                placeItem.SetSprite(obj.editorPreview);
+                placeItem.SetItemIndex(i);
+                placeItem.SetGridItems(GridObjectLoader.Instance.GridObjectManager.BottomPanelItemsList);
+            }
+        }
+        public void ClearActionPanelItems()
+        {
+            for (int i = ActionPanel.childCount - 1; i >= 0; i--)
+            {
+                Destroy(ActionPanel.GetChild(i).gameObject);
+            }
+        }
+        public void CreateActionPanelItems(GridObject gridObject)
+        {
+            if (gridObject.complexGridObjects == null)
+                return;
+
+            for (int i = 0; i < gridObject.complexGridObjects.Count; i++)
+            {
+                GridObject complexObject = gridObject.complexGridObjects[i];
+                GameObject gameObject = Instantiate(ActionItemPrefab, ActionPanel);
+                ActionPanelItem placeItem = gameObject.GetComponent<ActionPanelItem>();
+                placeItem.SetNameText(complexObject.displayName);
+                placeItem.SetSprite(complexObject.editorPreview);
+                placeItem.SetItemIndex(i);
+            }
         }
     }
 }

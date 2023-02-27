@@ -15,9 +15,10 @@ MonoBehaviour:
   showInPlaceItemsPanel: 0
   type: 2
   paymentType: 1
-  name: Normal Sitting Guard
+  displayName: Normal Sitting Guard
+  name: NormalSittingGuard
   price: 2000
   editorPreview: {fileID: 21300000, guid: 74a372d071faaa44b8dbc2f8bf473e5c, type: 3}
   finishedPrefab: {fileID: 0}
   isComplexObject: 0
-  otherGridObjects: []
+  complexGridObjects: []

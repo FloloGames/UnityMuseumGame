@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -741,6 +741,7 @@ GameObject:
   - component: {fileID: 1430251137}
   - component: {fileID: 1430251138}
   - component: {fileID: 1430251139}
+  - component: {fileID: 1430251140}
   m_Layer: 0
   m_Name: Manger Scripts
   m_TagString: Untagged
@@ -775,11 +776,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fa6a7a0d3487f044ad27515e4a2b231, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TopPanel: {fileID: 57988313}
-  ActionsPanel: {fileID: 1975703183}
-  BottomPanel: {fileID: 1960162695}
+  ActionItemPrefab: {fileID: 5868031498735345470, guid: 46ed729c4c48f7e41b8769b52ba20246,
+    type: 3}
   PlaceItemPrefab: {fileID: 3293675741489795689, guid: 38a9a0a1fc0518240a10607f3d5a7d08,
     type: 3}
+  TopPanel: {fileID: 57988313}
+  ActionPanel: {fileID: 1975703183}
+  BottomPanel: {fileID: 1960162695}
 --- !u!114 &1430251138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -795,7 +798,7 @@ MonoBehaviour:
   notDraggedTime: 0.2
   moveSpeed: 5
   zoomSpeed: 4
-  maxCameraZoom: 10
+  maxCameraZoom: 5
   minCameraZoom: 40
   _targetCamera: {fileID: 2039328356}
   targetCamSize: 0
@@ -830,6 +833,18 @@ MonoBehaviour:
       PanelTransform: {fileID: 2078142606}
       OpenPos: 15
       ClosedPos: -150
+--- !u!114 &1430251140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430251135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d844cac8733af34e83b22a430adf534, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1692649044
 GameObject:
   m_ObjectHideFlags: 0
@@ -1133,50 +1148,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &1929980721
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1929980723}
-  - component: {fileID: 1929980722}
-  m_Layer: 0
-  m_Name: CoroutineManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1929980722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1929980721}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d844cac8733af34e83b22a430adf534, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1929980723
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1929980721}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1940508572
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Help
 {
@@ -32,6 +33,23 @@ namespace Help
             textMesh.fontSize = fontSize;
             textMesh.color = Color.white;
             return gameObject;
+        }
+        public static bool IsCurrFirstTouchOnGUI()
+        {
+            if (Input.touchCount <= 0)
+                return false;
+
+            return EventSystem.current.IsPointerOverGameObject(/*Input.GetTouch(0).fingerId*/0);
+        }
+        public static Vector2 GetCenterOfTouches()
+        {
+            Vector2 center = new Vector2();
+            foreach (var touch in Input.touches)
+            {
+                center += touch.position;
+            }
+            center /= Input.touchCount;
+            return center;
         }
     }
 }

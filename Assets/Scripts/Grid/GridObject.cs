@@ -11,18 +11,20 @@ namespace Grid
         public bool showInPlaceItemsPanel = true;
         public GridType type = GridType.EMPTY;
         public PaymentType paymentType = PaymentType.ONCE;
+        public string displayName = "Empty";
         public new string name = "Empty";
-        public int price = 100;//difference between dayly or onetime
+        public int price = 0;//difference between dayly or onetime
         public Sprite editorPreview = null;
         public GameObject finishedPrefab = null;
         /// <summary>
         /// if set to true you can add otherGridObjects which will then be shown to the user
         /// </summary>
         public bool isComplexObject = false;
+        
         /// <summary>
         /// other GridObjecs which the user has to move to add the object
         /// </summary>
-        public List<GridObject> otherGridObjects;
+        public List<GridObject> complexGridObjects;
 
         private void OnEnable()
         {
@@ -41,7 +43,7 @@ namespace Grid
         override
         public string ToString()
         {
-            return $"{name} : {type}";
+            return $"{displayName} : {type}";
         }
     }
 
@@ -52,12 +54,13 @@ namespace Grid
     public class GridObjectEditor : Editor
     {
         private SerializedProperty showInPlaceItemsPanel;
-        private SerializedProperty otherGridObjects;
+        private SerializedProperty complexGridObjects;
         private SerializedProperty isComplexObject;
         private SerializedProperty paymentType;
         private SerializedProperty finishedPrefab;
         private SerializedProperty type;
         private SerializedProperty editorPreview;
+        private SerializedProperty displayName;
         private new SerializedProperty name;
         private SerializedProperty price;
 
@@ -66,12 +69,13 @@ namespace Grid
         private void OnEnable()
         {
             showInPlaceItemsPanel = serializedObject.FindProperty("showInPlaceItemsPanel");
-            otherGridObjects = serializedObject.FindProperty("otherGridObjects");
+            complexGridObjects = serializedObject.FindProperty("complexGridObjects");
             isComplexObject = serializedObject.FindProperty("isComplexObject");
             paymentType = serializedObject.FindProperty("paymentType");
             finishedPrefab = serializedObject.FindProperty("finishedPrefab");
             type = serializedObject.FindProperty("type");
             editorPreview = serializedObject.FindProperty("editorPreview");
+            displayName = serializedObject.FindProperty("displayName");
             name = serializedObject.FindProperty("name");
             price = serializedObject.FindProperty("price");
         }
@@ -99,6 +103,7 @@ namespace Grid
             if (!CheckEnumEqual(type, GridType.PAINTING) && !CheckEnumEqual(type, GridType.STATUE))
                 EditorGUILayout.PropertyField(paymentType);
 
+            EditorGUILayout.PropertyField(displayName);
             EditorGUILayout.PropertyField(name);
 
             //Wenn keine Statur und kein Gemälde ist dann kostet was weil es sonst schon gekauft/geklaut wurde
@@ -114,7 +119,7 @@ namespace Grid
                 EditorGUILayout.PropertyField(isComplexObject);
 
             if (isComplexObject.boolValue)
-                EditorGUILayout.PropertyField(otherGridObjects);
+                EditorGUILayout.PropertyField(complexGridObjects);
 
             serializedObject.ApplyModifiedProperties();
 
@@ -139,7 +144,7 @@ namespace Grid
                 EditorGUILayout.PropertyField(isComplexObject);
 
             if (isComplexObject.boolValue)
-                EditorGUILayout.PropertyField(otherGridObjects);
+                EditorGUILayout.PropertyField(complexGridObjects);
         }
         private bool CheckEnumEqual<T>(SerializedProperty enum_, T targetEnumValue) where T : System.Enum
         {

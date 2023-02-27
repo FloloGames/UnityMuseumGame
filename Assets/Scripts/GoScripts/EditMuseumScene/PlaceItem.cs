@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using Grid;
+using Managers;
 
 public class PlaceItem : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class PlaceItem : MonoBehaviour
     [SerializeField]
     private Image image;
     private int itemIndex;
+
+    private List<GridObject> gridItems;
 
     public void SetNameText(string name)
     {
@@ -31,9 +34,14 @@ public class PlaceItem : MonoBehaviour
     {
         itemIndex = index;
     }
+    public void SetGridItems(List<GridObject> gridObjects)
+    {
+        gridItems = gridObjects;
+    }
     public void SelectButtonPressed()
     {
-        GridBuilder.SetSelectedPlaceIndex(itemIndex);
-        SelectedItemTile.RemoveCurrentSpawnedItemTile();
+        GridObject gridObject = gridItems[itemIndex];
+        GridBuilder.SetSelectedPlaceIndex(itemIndex, gridObject);
+        SelectedTileItemManager.RemoveCurrentSpawnedItemTile();
     }
 }

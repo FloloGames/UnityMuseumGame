@@ -15,11 +15,11 @@ MonoBehaviour:
   showInPlaceItemsPanel: 0
   type: 5
   paymentType: 0
-  name: Moving Guard
+  displayName: Moving Guard
+  name: MovingGuard
   price: 100
   editorPreview: {fileID: 21300000, guid: 74a372d071faaa44b8dbc2f8bf473e5c, type: 3}
   finishedPrefab: {fileID: 0}
   isComplexObject: 1
-  otherGridObjects:
+  complexGridObjects:
   - {fileID: 11400000, guid: 16095c0ee61914646a1b750b00d1d0f0, type: 2}
-  - {fileID: 11400000, guid: 04fbd171c1fabff44a0a8336897094da, type: 2}

@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Monalisa
   m_EditorClassIdentifier: 
   showInPlaceItemsPanel: 0
-  type: 5
+  type: 6
   paymentType: 0
+  displayName: Monalisa
   name: Monalisa
   price: 1200000
   editorPreview: {fileID: 21300000, guid: aace84b808c2edd4680939d7a1f14f84, type: 3}
   finishedPrefab: {fileID: 0}
   isComplexObject: 1
-  otherGridObjects:
+  complexGridObjects:
   - {fileID: 11400000, guid: 5bec3f48a85c9464aa32ee0aa34c1bea, type: 2}

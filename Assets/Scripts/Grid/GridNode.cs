@@ -33,7 +33,7 @@ namespace Grid
         override
         public string ToString()
         {
-            return $"{I}:{J} {TintColor} {GridObject.name} {GridObject.type}";
+            return $"{I}:{J} {TintColor} {GridObject.displayName} {GridObject.type}";
         }
     }
 }

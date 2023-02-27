@@ -1,3 +1,4 @@
+using Help;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,10 @@ public class EditMenu_CameraController : MonoBehaviour
     private Vector3 targetPosition;
     private Vector3 touchStartPos; // The position of the touch when the player first starts dragging
 
+    /// <summary>
+    /// if true the Camera wont move
+    /// </summary>
+    private bool StartDragOnGUI = false;
 
     private float touchStartTime; // in seconds
 
@@ -39,17 +44,10 @@ public class EditMenu_CameraController : MonoBehaviour
         targetCamSize = GetCameraSize();
         instance = this;
     }
-    public static bool Dragging()
-    {
-        if (instance == null)
-        {
-            return false;
-        }
-        return instance.IsDragging();
-    }
     private void Update()
     {
-        //Debug.Log(EventSystem.current.IsPointerOverGameObject());
+        //if (Input.touchCount > 0)
+        //    Debug.Log(EventSystem.current.IsPointerOverGameObject(0));
         UpdateMoveCamera();
         MoveCamera();
         UpdateCameraSize();
@@ -87,9 +85,8 @@ public class EditMenu_CameraController : MonoBehaviour
 
         float diff = currDist - prevDist;
 
-
-        Debug.Log(currDist + " " + prevDist);
-        Debug.Log(diff);
+        //Debug.Log(currDist + " " + prevDist);
+        //Debug.Log(diff);
 
         targetCamSize = GetCameraSize() - diff * multiplyer;
     }
@@ -98,33 +95,26 @@ public class EditMenu_CameraController : MonoBehaviour
         if (Input.touchCount <= 0)
             return;
 
-        Vector3 currTouchPos = GetCenterOfPresses();
+        Vector3 currTouchPos = _targetCamera.ScreenToWorldPoint(HelperFunctions.GetCenterOfTouches());
+
         if (Input.GetTouch(0).phase == TouchPhase.Began) //Press started
         {
+            StartDragOnGUI = HelperFunctions.IsCurrFirstTouchOnGUI();
             touchStartTime = Time.time;
             touchStartPos = currTouchPos;
             return;
         }
-        if (Input.GetTouch(0).phase == TouchPhase.Moved) // If the player is dragging their finger
+        if (Input.GetTouch(0).phase == TouchPhase.Moved && !StartDragOnGUI) // If the player is dragging their finger
         {
             Vector3 dragOffset = touchStartPos - currTouchPos;
             targetPosition = _targetCamera.transform.position + dragOffset;
             return;
         }
-    }
-    private Vector3 GetCenterOfPresses()
-    {
-        Vector3 center = new Vector3();
-        foreach (var touch in Input.touches)
+        if (Input.GetTouch(0).phase == TouchPhase.Ended)
         {
-            center += _targetCamera.ScreenToWorldPoint(touch.position);
+            StartDragOnGUI = HelperFunctions.IsCurrFirstTouchOnGUI();
+            return;
         }
-        center /= Input.touchCount;
-        return center;
-    }
-    private bool IsDragging()
-    {
-        return GetPressTime() > notDraggedTime;
     }
     private float GetPressTime()
     {
@@ -133,6 +123,18 @@ public class EditMenu_CameraController : MonoBehaviour
     private float GetCameraSize()
     {
         return _targetCamera.GetComponent<Camera>().orthographicSize;
+    }
+    private bool IsDragging()
+    {
+        return GetPressTime() > notDraggedTime;
+    }
+    public static bool Dragging()
+    {
+        if (instance == null)
+        {
+            return false;
+        }
+        return instance.IsDragging();
     }
     //private void UpdateInputSystem()
     //{
