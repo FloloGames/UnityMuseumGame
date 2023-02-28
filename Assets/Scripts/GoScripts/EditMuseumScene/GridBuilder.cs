@@ -1,8 +1,6 @@
 using Help;
 using Managers;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Grid
 {

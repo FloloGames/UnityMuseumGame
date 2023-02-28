@@ -1,15 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Grid
 {
-
+    [Serializable]
     /// <summary>
     /// Interface for <see cref="GridObject"/> which are ComplexGridObjects
+    /// also saves important information 
     /// </summary>
-    public interface ComplexGridObjectInterface
+    public abstract class ComplexGridObjectInterface
     {
-        public void Update();
+        public abstract void OnItemSet(int i, int j, GridObject complexObject);
     }
 }

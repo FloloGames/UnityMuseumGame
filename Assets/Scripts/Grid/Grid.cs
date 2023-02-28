@@ -138,6 +138,10 @@ namespace Grid
             int _j = Mathf.Clamp(j, 0, _gridArray.GetLength(1) - 1);
             return new Vector2Int(_i, _j);
         }
+        public void CallComplexGridScript(int i, int j)
+        {
+
+        }
         //public Vector2 GetScreenCellSize(Vector3 worldPosition)
         //{
         //    WorldPositionToIndex(worldPosition, out int i, out int j);

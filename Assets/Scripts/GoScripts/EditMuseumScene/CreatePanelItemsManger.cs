@@ -80,8 +80,9 @@ namespace Managers
                 ActionPanelItem placeItem = gameObject.GetComponent<ActionPanelItem>();
                 placeItem.SetNameText(complexObject.displayName);
                 placeItem.SetSprite(complexObject.editorPreview);
-                placeItem.SetItemIndex(i);
+                placeItem.SetComplexObject(complexObject);
                 placeItem.SetParentPanel(ActionPanel.transform as RectTransform);
+                placeItem.SetSelectedObjectIndex(SelectedTileItemManager.Index);
             }
         }
     }

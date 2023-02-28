@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 936daa57f50b5c040881d35d83a10396, type: 3}
-  m_Name: TestMovementPoint0
+  m_Name: TargetMovementPoint0
   m_EditorClassIdentifier: 
   showInPlaceItemsPanel: 0
   type: 8

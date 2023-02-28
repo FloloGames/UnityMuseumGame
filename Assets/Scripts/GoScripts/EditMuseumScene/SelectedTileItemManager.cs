@@ -14,10 +14,10 @@ namespace Managers
     {
         private static GameObject itemPrefab;
         private static GameObject CurrentSpawnedItem;
-        private static Vector2 _index;
+        private static Vector2Int _index;
         private static int currentMovingId;
 
-        public static Vector2 Index
+        public static Vector2Int Index
         {
             get
             {

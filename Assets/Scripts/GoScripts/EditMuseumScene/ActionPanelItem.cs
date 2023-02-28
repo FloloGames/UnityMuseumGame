@@ -19,12 +19,12 @@ public class ActionPanelItem : MonoBehaviour, IDragHandler, IEndDragHandler, IDr
     private Image image;
     [SerializeField]
     private float animationTime = 0.5f;
+    private GridObject complexObject;
     private RectTransform parentPanel;
     private Vector3 startDragPositon;
     private Vector3 normalSize;
-    private bool isDragged;
     private bool isOnParentPanel;
-    private int itemIndex;
+    private Vector2Int index;
 
     private void Awake()
     {
@@ -88,18 +88,21 @@ public class ActionPanelItem : MonoBehaviour, IDragHandler, IEndDragHandler, IDr
     {
         image.sprite = sprite;
     }
-    public void SetItemIndex(int index)
+    public void SetComplexObject(GridObject gridObject)
     {
-        itemIndex = index;
+        complexObject = gridObject;
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
-        isDragged = true;
         startDragPositon = transform.position;
     }
     public void SetParentPanel(RectTransform rectTransform)
     {
         parentPanel = rectTransform;
+    }
+    public void SetSelectedObjectIndex(Vector2Int vec)
+    {
+        index = vec;
     }
     public void OnDrag(PointerEventData eventData)
     {
@@ -109,12 +112,24 @@ public class ActionPanelItem : MonoBehaviour, IDragHandler, IEndDragHandler, IDr
     }
     public void OnEndDrag(PointerEventData eventData)
     {
-        isDragged = false;
         transform.position = startDragPositon;
         EnteredParentPanel();
     }
     public void OnDrop(PointerEventData eventData)
     {
+        Vector2 touchPosition = HelperFunctions.GetCenterOfTouches();
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(touchPosition);
 
+        GridBuilder.Instance.Grid.WorldPositionToIndex(worldPosition, out int i, out int j);
+
+        bool inGrid = GridBuilder.Instance.Grid.IndexInGrid(i, j);
+        if (!inGrid)
+            return;
+
+        var complexGridScript = GridBuilder.Instance.Grid.GetValue(index.x, index.y).GridObject.complexGridScript;
+        if (complexGridScript == null)
+            return;
+
+        complexGridScript.OnItemSet(i, j, complexObject);
     }
 }

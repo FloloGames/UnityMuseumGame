@@ -1,7 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 namespace Grid
 {
@@ -11,6 +12,7 @@ namespace Grid
         public bool showInPlaceItemsPanel = true;
         public GridType type = GridType.EMPTY;
         public PaymentType paymentType = PaymentType.ONCE;
+        public ComplexGridObjectInterface complexGridScript;
         public string displayName = "Empty";
         public new string name = "Empty";
         public int price = 0;//difference between dayly or onetime
@@ -20,7 +22,7 @@ namespace Grid
         /// if set to true you can add otherGridObjects which will then be shown to the user
         /// </summary>
         public bool isComplexObject = false;
-        
+
         /// <summary>
         /// other GridObjecs which the user has to move to add the object
         /// </summary>
@@ -47,6 +49,7 @@ namespace Grid
         }
     }
 
+#if UNITY_EDITOR //only compile if its in the UnityEditor
     /// <summary>
     /// Class to manage the <see cref="GridObject"/> Inspector 
     /// </summary>
@@ -163,4 +166,6 @@ namespace Grid
             return -1;
         }
     }
+#endif
+
 }
