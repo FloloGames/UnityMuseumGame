@@ -29,26 +29,25 @@ namespace Grid
             GridObjectManager = Resources.Load<GridObjectManager>(PathToGridObjectManager);
         }
         /// <summary>
-        /// Gets the first Item index by the given Type
+        /// Gets the first Item by the given Type or null
         /// </summary>
         /// <param name="gridType"></param>
-        /// <returns>-1 if no <see cref="GridObject"/> was found or the <see cref="GridObjectManager"/> was null
-        /// <para>otherwise the index of the Type</para>
+        /// <returns>null if no <see cref="GridObject"/> was found or the <see cref="GridObjectManager"/> was not initia
         /// </returns>
-        public int GetItemIndexByType(GridType gridType)
+        public GridObject GetItemByType(string gridType)
         {
             if (GridObjectManager == null)
-                return -1;
+                return null;
 
             for (int i = 0; i < GridObjectManager.TopPanelItemsList.Count; i++)
             {
                 var placeItem = GridObjectManager.TopPanelItemsList[i];
                 if (placeItem.type == gridType)
                 {
-                    return i;
+                    return placeItem;
                 }
             }
-            return -1;
+            return null;
         }
     }
 }

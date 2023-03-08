@@ -53,7 +53,7 @@ public class ActionPanelItem : MonoBehaviour, IDragHandler, IEndDragHandler, IDr
         if (LeanTween.isTweening(gameObject))
             LeanTween.cancel(gameObject);
         Vector2 touchPosition = HelperFunctions.GetCenterOfTouches();
-        SelectedTileItemManager.RemoveCurrentSpawnedItemTile();
+        SelectedTileItemManager.RemoveConstItemTile();
         transform.LeanScale(normalSize, animationTime);
     }
     private void LeftParentPanel()
@@ -125,11 +125,7 @@ public class ActionPanelItem : MonoBehaviour, IDragHandler, IEndDragHandler, IDr
         bool inGrid = GridBuilder.Instance.Grid.IndexInGrid(i, j);
         if (!inGrid)
             return;
-
-        var complexGridScript = GridBuilder.Instance.Grid.GetValue(index.x, index.y).GridObject.complexGridScript;
-        if (complexGridScript == null)
-            return;
-
-        complexGridScript.OnItemSet(i, j, complexObject);
+        GridObject parentGridObject = GridBuilder.Instance.Grid.GetValue(index.x, index.y).GridObject;
+        parentGridObject.OnItemSet(i, j, complexObject);
     }
 }

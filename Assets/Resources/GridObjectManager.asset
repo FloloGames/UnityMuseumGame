@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: GridObjectManager
   m_EditorClassIdentifier: 
   TopPanelItemsList:
-  - {fileID: 11400000, guid: 9408ec34530d21e438e49a4832828f29, type: 2}
-  - {fileID: 11400000, guid: 75f047be3f92fa74aaae52b014b2ceb5, type: 2}
-  - {fileID: 11400000, guid: 1d11e961b6ba0eb4fb435e2ae52c3614, type: 2}
+  - {fileID: 11400000, guid: 2aebd475d709ffe40b2821da3f446709, type: 2}
+  - {fileID: 11400000, guid: 433c2f2c6ba6bf840bd4fd3b02735f32, type: 2}
+  - {fileID: 11400000, guid: 343ed3e98ee6c0045940bf975f007ad4, type: 2}
   BottomPanelItemsList:
-  - {fileID: 11400000, guid: 6ec7b0a9d890855409f2d63fd99d3d93, type: 2}
-  - {fileID: 11400000, guid: 75d532230db813348a6da5f12ef0d88b, type: 2}
+  - {fileID: 11400000, guid: 202b73b0d26fded43aa373a76133d59a, type: 2}

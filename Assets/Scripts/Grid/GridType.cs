@@ -1,27 +1,27 @@
 namespace Grid
 {
-    public enum GridType
+    public static class GridType
     {
-        EMPTY,//Boden Flur etc lauf area
-        WALL, //Wand zerwtörbar aber nicht am Anfang erst später dann wird es auch noch verhärtete Wände geben 
         /// <summary>
-        /// When clicked hide other items aka the Bottonpanel
+        /// delete Object 
+        /// </summary>
+        public static readonly string EMPTY = "Empty";//Boden Flur etc lauf area
+
+        public static readonly string WALL = "Wall"; //Wand zerwtörbar aber nicht am Anfang erst später dann wird es auch noch verhärtete Wände geben 
+        /// <summary>
+        /// When clicked hide other items aka the TopPanel
         /// <para>to select a Tile to see complex Items</para>
         /// </summary>
-        SELECT,
+        public static readonly string SELECT = "Emptyselect";
 
-        SITTING_GUARD, //Normaler Sitzender Wächter 
-        LAZY_GUARD,//Sitzender Schlafender wächter
-        MOVING_GUARD, // Bewegender Wächter zwischen zwei Punkten
-        PAINTING, //Gemälde
-        STATUE,//statur oder antike shit
+        public static readonly string SITTING_GUARD = "Sitting_Guard"; //Normaler Sitzender Wächter 
+        public static readonly string LAZY_GUARD = "Lazy_Guard";//Sitzender Schlafender wächter
+        public static readonly string MOVING_GUARD = "Moving_Guard"; // Bewegender Wächter zwischen zwei Punkten
+        public static readonly string PAINTING = "Painting"; //Gemälde
+        public static readonly string STATUE = "Statue";//statur oder antike shit
 
         //Not visible Types
-        /// <summary>
-        /// Waypoint for moving Objects e.g. Moving Officer
-        /// </summary>
-        MOVEMENT_POINT,
-        WHERE_TO_PLACE_PAINTING,
+        public static readonly string WHERE_TO_PLACE_PAINTING = "Where_To_Place_Painting";
     }
 }
 

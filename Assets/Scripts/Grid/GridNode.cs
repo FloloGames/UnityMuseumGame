@@ -15,13 +15,21 @@ namespace Grid
             I = i;
             J = j;
             TintColor = color;
-            GridObject = ScriptableObject.CreateInstance<GridObject>();
+            GridObject = Help.HelperFunctions.CreateNormalGridObject();
         }
-        public GridNode(int i, int j, Color color, GridObject gridObject)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <param name="gridObject"></param>
+        /// <param name="color">default value is <see cref="Color.white"/></param>
+        public GridNode(int i, int j, GridObject gridObject, Color? color = null)
         {
+            color ??= Color.white;
             I = i;
             J = j;
-            TintColor = color;
+            TintColor = (Color)color;
             GridObject = gridObject;
         }
         public void UpdateGameObject()

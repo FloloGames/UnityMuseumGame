@@ -9,17 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 936daa57f50b5c040881d35d83a10396, type: 3}
-  m_Name: MovingGuard
+  m_Script: {fileID: 11500000, guid: 7740c1425890fd040ad09abf3e25e62c, type: 3}
+  m_Name: MovingGuardGridObject
   m_EditorClassIdentifier: 
-  showInPlaceItemsPanel: 0
-  type: 5
-  paymentType: 0
+  showInPlaceItemsPanel: 1
+  type: Moving_Guard
+  paymentType: 1
   displayName: Moving Guard
-  name: MovingGuard
+  name: Moving_Guard
   price: 100
+  editorPreviewUI: {fileID: 21300000, guid: 74a372d071faaa44b8dbc2f8bf473e5c, type: 3}
   editorPreview: {fileID: 21300000, guid: 74a372d071faaa44b8dbc2f8bf473e5c, type: 3}
   finishedPrefab: {fileID: 0}
-  isComplexObject: 1
+  isComplexObject: 0
   complexGridObjects:
-  - {fileID: 11400000, guid: 16095c0ee61914646a1b750b00d1d0f0, type: 2}
+  - {fileID: 11400000, guid: b53011de19fd206499e3823c71654fcb, type: 2}

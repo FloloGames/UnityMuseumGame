@@ -6,6 +6,9 @@ using UnityEngine.UI;
 using Grid;
 using Managers;
 
+/// <summary>
+/// Script for PlaceItemPrefab (Button for GridObjects) not complex ones
+/// </summary>
 public class PlaceItem : MonoBehaviour
 {
     [SerializeField]
@@ -14,35 +17,35 @@ public class PlaceItem : MonoBehaviour
     private TMP_Text priceText;
     [SerializeField]
     private Image image;
-    private int itemIndex;
+    private GridObject item;
 
-    private List<GridObject> gridItems;
-
-    public void SetNameText(string name)
+    private void SetNameText(string name)
     {
         nameText.text = name;
     }
-    public void SetPriceText(string price)
+    private void SetPriceText(string price)
     {
         priceText.text = price;
     }
-    public void SetSprite(Sprite sprite)
+    private void SetSprite(Sprite sprite)
     {
         image.sprite = sprite;
     }
-    public void SetItemIndex(int index)
-    {
-        itemIndex = index;
-    }
-    public void SetGridItems(List<GridObject> gridObjects)
-    {
-        gridItems = gridObjects;
-    }
     public void SelectButtonPressed()
     {
-        GridObject gridObject = gridItems[itemIndex];
-        GridBuilder.SetSelectedPlaceIndex(itemIndex, gridObject);
-        SelectedTileItemManager.RemoveCurrentSpawnedItemTile();
+        GridBuilder.SetSelectedPlaceItem(item);
+        SelectedTileItemManager.RemoveConstItemTile();
         UIPanelManager.Instance.OpenPanel(UIPanelManager.TOP_PANEL_NAME);
     }
+    public void SetItem(GridObject gridObject)
+    {
+        item = gridObject;
+    }
+    public void UpdateUI()
+    {
+        SetNameText(item.displayName);
+        SetPriceText(item.price.ToString());
+        SetSprite(item.editorPreviewUI);
+    }
+
 }

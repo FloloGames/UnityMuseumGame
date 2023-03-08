@@ -9,16 +9,14 @@ namespace Grid
         private static GridBuilder _instance;
         public static GridBuilder Instance => _instance;
 
-        public int SelectedPlaceItemIndex;
+        public GridObject SelectedPlaceItem { get; private set; }
 
         [Header("Prefabs")]
         [SerializeField]
         private GameObject selectedItemPrefab;
 
-        private GridObject SelectedItem;
-
-        private Grid _grid;
-        public Grid Grid => _grid;
+        private Grid mGrid;
+        public Grid Grid => mGrid;
 
         private bool clickOnGUI = false;
 
@@ -28,13 +26,16 @@ namespace Grid
         }
         private void Start()
         {
-            _grid = new Grid(20, 20, 2f, new Vector3(-10, 0, -10));
-            _grid.CreateWorldUI();
-            SelectedPlaceItemIndex = GridObjectLoader.Instance.GetItemIndexByType(GridType.EMPTY);
+            mGrid = new Grid(20, 20, 2f, new Vector3(-10, 0, -10));
+            mGrid.CreateWorldUI();
+            SelectedPlaceItem = HelperFunctions.CreateNormalGridObject();
             SelectedTileItemManager.Init(selectedItemPrefab);
         }
-
         private void Update()
+        {
+            UpdateTouchInput();
+        }
+        private void UpdateTouchInput()
         {
             if (Input.touchCount <= 0)
                 return;
@@ -42,41 +43,26 @@ namespace Grid
 
             if (Input.GetTouch(0).phase == TouchPhase.Ended && !EditMenu_CameraController.Dragging())
             {
-                if (clickOnGUI)
-                    return;
-
-                Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                _grid.WorldPositionToIndex(worldPoint, out int i, out int j);
-                if (!_grid.IndexInGrid(i, j))
-                    return;
-
-                if (SelectedItem.type != GridType.SELECT)
-                {
-                    GridNode node = new GridNode(i, j, Color.white, SelectedItem);
-                    _grid.SetValueNotGameObject(i, j, node);
-                    return;
-                }
-
-
-
-                if (SelectedTileItemManager.Index.x == i && SelectedTileItemManager.Index.y == j)
-                {
-                    SelectedTileItemManager.RemoveCurrentSpawnedItemTile();
-                    SelectedTileItemManager.ResetIndex();
-                    UIPanelManager.Instance.OpenPanel(UIPanelManager.TOP_PANEL_NAME);
-                    return;
-                }
-                SelectedTileItemManager.SpawnNewSelectedItemTile(i, j);
-                GridNode gridNode = Grid.GetValue(i, j);
-                CreatePanelItemsManger.Instance.ClearActionPanelItems();
-                CreatePanelItemsManger.Instance.CreateActionPanelItems(gridNode.GridObject);
+                DisplayTouched();
             }
             clickOnGUI = HelperFunctions.IsCurrFirstTouchOnGUI();
+            Debug.Log("Clicked GUI: " + clickOnGUI);
         }
-        public static void SetSelectedPlaceIndex(int i, GridObject gridObject)
+        private void DisplayTouched()
         {
-            Instance.SelectedItem = gridObject;
-            Instance.SelectedPlaceItemIndex = i;
+            if (clickOnGUI)
+                return;
+
+            Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mGrid.WorldPositionToIndex(worldPoint, out int i, out int j);
+            if (!mGrid.IndexInGrid(i, j))
+                return;
+
+            SelectedPlaceItem.PlaceOnGrid(Grid, i, j);
+        }
+        public static void SetSelectedPlaceItem(GridObject selectedItem)
+        {
+            Instance.SelectedPlaceItem = selectedItem;
         }
     }
 }

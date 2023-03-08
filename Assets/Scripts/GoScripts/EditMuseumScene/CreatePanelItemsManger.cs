@@ -1,4 +1,5 @@
 using Grid;
+using Help;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -40,11 +41,8 @@ namespace Managers
                 var obj = GridObjectLoader.Instance.GridObjectManager.TopPanelItemsList[i];
                 GameObject gameObject = Instantiate(PlaceItemPrefab, TopPanel);
                 PlaceItem placeItem = gameObject.GetComponent<PlaceItem>();
-                placeItem.SetNameText(obj.displayName);
-                placeItem.SetPriceText(obj.price.ToString());
-                placeItem.SetSprite(obj.editorPreview);
-                placeItem.SetItemIndex(i);
-                placeItem.SetGridItems(GridObjectLoader.Instance.GridObjectManager.TopPanelItemsList);
+                placeItem.SetItem(obj);
+                placeItem.UpdateUI();
             }
         }
         private void CreateBottomPanelItemsUI()
@@ -54,19 +52,13 @@ namespace Managers
                 var obj = GridObjectLoader.Instance.GridObjectManager.BottomPanelItemsList[i];
                 GameObject gameObject = Instantiate(PlaceItemPrefab, BottomPanel);
                 PlaceItem placeItem = gameObject.GetComponent<PlaceItem>();
-                placeItem.SetNameText(obj.displayName);
-                placeItem.SetPriceText(obj.price.ToString());
-                placeItem.SetSprite(obj.editorPreview);
-                placeItem.SetItemIndex(i);
-                placeItem.SetGridItems(GridObjectLoader.Instance.GridObjectManager.BottomPanelItemsList);
+                placeItem.SetItem(obj);
+                placeItem.UpdateUI();
             }
         }
         public void ClearActionPanelItems()
         {
-            for (int i = ActionPanel.childCount - 1; i >= 0; i--)
-            {
-                Destroy(ActionPanel.GetChild(i).gameObject);
-            }
+            HelperFunctions.DestroyAllChildren(ActionPanel.gameObject);
         }
         public void CreateActionPanelItems(GridObject gridObject)
         {
@@ -82,7 +74,7 @@ namespace Managers
                 placeItem.SetSprite(complexObject.editorPreview);
                 placeItem.SetComplexObject(complexObject);
                 placeItem.SetParentPanel(ActionPanel.transform as RectTransform);
-                placeItem.SetSelectedObjectIndex(SelectedTileItemManager.Index);
+                placeItem.SetSelectedObjectIndex(SelectedTileItemManager.ConstIndex);
             }
         }
     }

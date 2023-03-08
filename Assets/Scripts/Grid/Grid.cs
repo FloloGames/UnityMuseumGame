@@ -4,46 +4,53 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace Grid
 {
+    /// <summary>
+    /// The Grid class which holds everything for the grid 
+    /// </summary>
     public class Grid
     {
-        [Header("Colors")]
-        public readonly Color evenColor = new Color(0.21f, 0.21f, 0.21f, 1);
-        public readonly Color oddColor = new Color(0.46f, 0.46f, 0.46f, 1);
+        public readonly Color EvenColor = new Color(0.21f, 0.21f, 0.21f, 1);
+        public readonly Color EddColor = new Color(0.46f, 0.46f, 0.46f, 1);
 
-        private readonly int _width, _height;
-        private GridNode[,] _gridArray;
-        private Vector3 _originPosition;
+        /// <summary>
+        /// List which holds every foatingGameObject
+        /// </summary>
+        private List<GameObject> mFloatingObjects = new List<GameObject>();
 
-        private float _cellSize;
-        public float CellSize => _cellSize;
+        private readonly int mWidth, mHeight;
+        private GridNode[,] mGridArray;
+        private Vector3 mOriginPosition;
+
+        private float mCellSize;
+        public float CellSize => mCellSize;
 
         public Grid(int width, int height, float cellSize, Vector3 originPosition)
         {
-            _width = width;
-            _height = height;
-            _cellSize = cellSize;
-            _originPosition = originPosition;
-            _gridArray = new GridNode[width, height];
-            for (int i = 0; i < _gridArray.GetLength(0); i++)
+            mWidth = width;
+            mHeight = height;
+            mCellSize = cellSize;
+            mOriginPosition = originPosition;
+            mGridArray = new GridNode[width, height];
+            for (int i = 0; i < mGridArray.GetLength(0); i++)
             {
-                for (int j = 0; j < _gridArray.GetLength(1); j++)
+                for (int j = 0; j < mGridArray.GetLength(1); j++)
                 {
 
                     Color color = GetNodeColor(i, j);
-                    _gridArray[i, j] = new GridNode(i, j, color);
+                    mGridArray[i, j] = new GridNode(i, j, color);
                 }
             }
         }
         public void CreateWorldUI()
         {
             Transform parent = new GameObject("GridNodesHolder").transform;
-            for (int i = 0; i < _gridArray.GetLength(0); i++)
+            for (int i = 0; i < mGridArray.GetLength(0); i++)
             {
-                for (int j = 0; j < _gridArray.GetLength(1); j++)
+                for (int j = 0; j < mGridArray.GetLength(1); j++)
                 {
                     GameObject go = CreateImageTile(i, j, parent);
-                    _gridArray[i, j].GameObject = go;
-                    _gridArray[i, j].UpdateGameObject();
+                    mGridArray[i, j].GameObject = go;
+                    mGridArray[i, j].UpdateGameObject();
                     //CreateWorldText(i + ":" + j, IndexToWorldPosition(i, j));
                 }
             }
@@ -54,14 +61,14 @@ namespace Grid
             GameObject gameObject = new GameObject($"ImgTile {i}:{j}", typeof(SpriteRenderer));
             Transform transform = gameObject.transform;
             transform.parent = parent;
-            transform.localScale = new Vector3(_cellSize, _cellSize, 1);
+            transform.localScale = new Vector3(mCellSize, mCellSize, 1);
             transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
             transform.localPosition = position;
             return gameObject;
         }
         public bool IndexInGrid(int i, int j)
         {
-            return i >= 0 && j >= 0 && i < _width && j < _height;
+            return i >= 0 && j >= 0 && i < mWidth && j < mHeight;
         }
         public bool SetValue(int i, int j, GridNode value)
         {
@@ -73,8 +80,8 @@ namespace Grid
                     Color tintColor = GetNodeColor(i, j);
                     value.TintColor = tintColor;
                 }
-                _gridArray[i, j] = value;
-                _gridArray[i, j].UpdateGameObject();
+                mGridArray[i, j] = value;
+                mGridArray[i, j].UpdateGameObject();
                 return true;
             }
             return false;
@@ -88,15 +95,15 @@ namespace Grid
         {
             if (IndexInGrid(i, j))
             {
-                GameObject go = _gridArray[i, j].GameObject;
+                GameObject go = mGridArray[i, j].GameObject;
                 value.GameObject = go;
                 if (value.GridObject.type == GridType.EMPTY)
                 {
                     Color tintColor = GetNodeColor(i, j);
                     value.TintColor = tintColor;
                 }
-                _gridArray[i, j] = value;
-                _gridArray[i, j].UpdateGameObject();
+                mGridArray[i, j] = value;
+                mGridArray[i, j].UpdateGameObject();
                 return true;
             }
             return false;
@@ -108,18 +115,18 @@ namespace Grid
         }
         public Vector3 IndexToWorldPosition(int i, int j)
         {
-            return new Vector3(i, 0, j) * _cellSize + new Vector3(_cellSize / 2, 0, _cellSize / 2) + _originPosition;
+            return new Vector3(i, 0, j) * mCellSize + new Vector3(mCellSize / 2, 0, mCellSize / 2) + mOriginPosition;
         }
         public void WorldPositionToIndex(Vector3 worldPos, out int i, out int j)
         {
-            i = Mathf.FloorToInt((worldPos - _originPosition).x / _cellSize);
-            j = Mathf.FloorToInt((worldPos - _originPosition).z / _cellSize);
+            i = Mathf.FloorToInt((worldPos - mOriginPosition).x / mCellSize);
+            j = Mathf.FloorToInt((worldPos - mOriginPosition).z / mCellSize);
         }
         public GridNode GetValue(int i, int j)
         {
             if (IndexInGrid(i, j))
             {
-                return _gridArray[i, j];
+                return mGridArray[i, j];
             }
             return null;
         }
@@ -130,15 +137,31 @@ namespace Grid
         }
         public Color GetNodeColor(int i, int j)
         {
-            return (i + j) % 2 == 0 ? evenColor : oddColor;
+            return (i + j) % 2 == 0 ? EvenColor : EddColor;
         }
         public Vector2Int ClampIndexIntoGrid(int i, int j)
         {
-            int _i = Mathf.Clamp(i, 0, _gridArray.GetLength(0) - 1);
-            int _j = Mathf.Clamp(j, 0, _gridArray.GetLength(1) - 1);
+            int _i = Mathf.Clamp(i, 0, mGridArray.GetLength(0) - 1);
+            int _j = Mathf.Clamp(j, 0, mGridArray.GetLength(1) - 1);
             return new Vector2Int(_i, _j);
         }
         public void CallComplexGridScript(int i, int j)
+        {
+
+        }
+        /// <summary>
+        /// Creates a "Floating Object" its not saved in the Grid array but shown in the GridUI
+        /// </summary>
+        public void CreateFloatingObject(Vector2Int pos, GridObject gridObject)
+        {
+            WorldPositionToIndex(new Vector3(pos.x, pos.y, 0), out int i, out int j);
+            GridNode node = new GridNode(i, j, gridObject, Color.white);
+        }
+        /// <summary>
+        /// Creates a line between the given Points
+        /// </summary>
+        /// <param name="points"></param>
+        public void CreateLine(Vector2Int[] points)
         {
 
         }

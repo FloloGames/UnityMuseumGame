@@ -1,3 +1,4 @@
+using Grid;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -50,6 +51,17 @@ namespace Help
             }
             center /= Input.touchCount;
             return center;
+        }
+        public static void DestroyAllChildren(GameObject gameObject)
+        {
+            for (int i = gameObject.transform.childCount - 1; i >= 0; i--)
+            {
+                GameObject.Destroy(gameObject.transform.GetChild(i).gameObject);
+            }
+        }
+        public static GridObject CreateNormalGridObject()
+        {
+            return ScriptableObject.CreateInstance<NormalGridObject>();
         }
     }
 }
